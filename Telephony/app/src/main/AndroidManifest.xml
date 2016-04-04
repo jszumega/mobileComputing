@@ -19,9 +19,11 @@
             </intent-filter>
         </activity>
 
-    </receiver>
         <receiver android:name="OutgoingCallReceiver" >
-    </receiver>
+        </receiver>
+
+        <receiver android:name="smsAnswer" >
+        </receiver>
     </application>
 
 

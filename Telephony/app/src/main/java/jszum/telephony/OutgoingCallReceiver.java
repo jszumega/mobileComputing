@@ -12,11 +12,8 @@ public class OutgoingCallReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(
                 Intent.ACTION_NEW_OUTGOING_CALL)) {
-            String phoneNumber =
-                    intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
-            if ((phoneNumber != null)
-                    && phoneNumber.equals(
-                    OutgoingCallReceiver.ABORT_PHONE_NUMBER)) {
+            String phoneNumber = intent.getExtras().getString(Intent.EXTRA_PHONE_NUMBER);
+            if ((phoneNumber != null) && phoneNumber.equals(OutgoingCallReceiver.ABORT_PHONE_NUMBER)) {
                 Toast.makeText(context,
                         "NEW_OUTGOING_CALL intercepted to number "
                                 + "123-123-1234 - aborting call",
