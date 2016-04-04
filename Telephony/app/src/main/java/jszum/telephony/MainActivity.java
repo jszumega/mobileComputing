@@ -5,10 +5,14 @@ import android.content.Context;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +21,11 @@ public class MainActivity extends AppCompatActivity {
     TelephonyManager telephonyManager;
     TextView informations;
     int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 999;
+
+    PhoneStateListener stateListener = new PhoneStateListener();
+    signalStrengthListener signalListener = new signalStrengthListener();
+    int SignalStrength = 1;
+    ProgressBar bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         informations = (TextView) findViewById(R.id.textView);
 
         Button gather = (Button) findViewById(R.id.buttonGather);
+        bar = (ProgressBar) findViewById(R.id.progressBar);
 
         gather.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
                 gatherInformation();
             }
         });
+
+        telephonyManager.listen(signalListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
+        String fullInfo = "Phone Type: " + "\n"
+                + "Device ID: "  + "\n"
+                + "Data State "  + "\n";
+        informations.setText(fullInfo);
+        bar.setProgress(SignalStrength);
     }
 
     private void gatherInformation() {
@@ -92,4 +110,21 @@ public class MainActivity extends AppCompatActivity {
 
         return dataStateString;
     }
+
+    public void toster() {
+        Toast.makeText(this, "Signal: " + Integer.toString(SignalStrength), 1);
+    }
+
+    public class signalStrengthListener extends PhoneStateListener {
+
+        @Override
+        public void onSignalStrengthsChanged(android.telephony.SignalStrength signalStrength) {
+            super.onSignalStrengthsChanged(signalStrength);
+            SignalStrength = signalStrength.getGsmSignalStrength();
+            //SignalStrength = (2 * SignalStrength) - 113; // -> dBm
+            toster();
+            bar.setProgress(SignalStrength);
+        }
+    }
 }
+
