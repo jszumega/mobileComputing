@@ -111,18 +111,14 @@ public class MainActivity extends AppCompatActivity {
         return dataStateString;
     }
 
-    public void toster() {
-        Toast.makeText(this, "Signal: " + Integer.toString(SignalStrength), 1);
-    }
+
 
     public class signalStrengthListener extends PhoneStateListener {
-
         @Override
         public void onSignalStrengthsChanged(android.telephony.SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
-            SignalStrength = signalStrength.getGsmSignalStrength();
-            //SignalStrength = (2 * SignalStrength) - 113; // -> dBm
-            toster();
+            //SignalStrength = signalStrength.getGsmSgnalStrength();
+            SignalStrength = signalStrength.getLevel(); // level 0-4
             bar.setProgress(SignalStrength);
         }
     }

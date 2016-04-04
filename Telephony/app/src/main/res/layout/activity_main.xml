@@ -29,9 +29,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
+        android:indeterminate="false"
         android:layout_below="@+id/buttonGather"
-        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/buttonGather"
         android:layout_marginTop="67dp"
-        android:indeterminate="false" />
+        android:layout_alignEnd="@+id/buttonGather"
+        android:max="4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Signal Level"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/progressBar"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
