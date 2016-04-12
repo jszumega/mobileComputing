@@ -9,15 +9,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    final static int AXIS_X = 0;
+    final static int AXIS_Y = 1;
+    final static int AXIS_Z = 2;
+
+    private float dX = 0.0f, dY = 0.0f, dZ = 0.0f;
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private AccelerometerListener acceleo;
 
     TextView textAcceleo;
+    EditText textX, textY, textZ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textAcceleo = (TextView) findViewById(R.id.textAcc);
+        textX = (EditText) findViewById(R.id.editTextX);
+        textX.setFocusable(false);
+        textY = (EditText) findViewById(R.id.editTextY);
+        textY.setFocusable(false);
+        textZ = (EditText) findViewById(R.id.editTextZ);
+        textZ.setFocusable(false);
 
         Button scan = (Button) findViewById(R.id.button);
 
@@ -54,19 +67,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class AccelerometerListener implements SensorEventListener {
+    public void update_Accelerometer() {
+        textX.setText(Float.toString(dX));
+        textY.setText(Float.toString(dY));
+        textZ.setText(Float.toString(dZ));
+    }
 
-        private float dX = 0.0f, dY = 0.0f, dZ = 0.0f;
+    public class AccelerometerListener implements SensorEventListener {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-
+            if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                dX = event.values[AXIS_X];
+                dY = event.values[AXIS_Y];
+                dZ = event.values[AXIS_Z];
+            }
+            update_Accelerometer();
         }
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
         }
-
     }
 }
