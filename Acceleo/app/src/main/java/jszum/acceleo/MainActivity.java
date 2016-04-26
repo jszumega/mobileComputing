@@ -18,6 +18,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     static final int REQ_ABOUT = 1992;
+    static final int COUNTER = 10;
 
     final static int AXIS_X = 0;
     final static int AXIS_Y = 1;
@@ -27,9 +28,14 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private AccelerometerListener acceleo;
+    private Toast toast;
+    private int step;
 
     String ipaddress;
     String port;
+    String message;
+
+
 
     TextView textAcceleo;
     EditText textX, textY, textZ;
@@ -46,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         textY.setFocusable(false);
         textZ = (EditText) findViewById(R.id.editTextZ);
         textZ.setFocusable(false);
+
+        toast = new Toast(this.getBaseContext());
 
         Button scan = (Button) findViewById(R.id.button);
 
@@ -82,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     String ip = returned.getString("ip");
                     String port = returned.getString("port");
 
-                    Toast.makeText(context, ip+":"+port, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, ip+":"+port, Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -107,12 +115,47 @@ public class MainActivity extends AppCompatActivity {
         textX.setText(Float.toString(dX));
         textY.setText(Float.toString(dY));
         textZ.setText(Float.toString(dZ));
+
+        String message = "";
+        toast.cancel();
+
+        if(dX > 2.0) {
+
+            message = "UP";
+            toast = Toast.makeText(this.getBaseContext(), message, Toast.LENGTH_SHORT);
+            toast.show();
+
+        }
+        if(dX < -2.0) {
+            message = "DOWN";
+            toast = Toast.makeText(this.getBaseContext(), message, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        if(dY > 2.0) {
+            message = "LEFT";
+            toast = Toast.makeText(this.getBaseContext(), message, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        if(dY < -2.0) {
+            message = "RIGHT";
+            toast = Toast.makeText(this.getBaseContext(), message, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+
+
     }
 
     public class AccelerometerListener implements SensorEventListener {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
+            ++step;
+            if(step > COUNTER) {
+                step = 0;
+                return;
+            }
+
             if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 dX = event.values[AXIS_X];
                 dY = event.values[AXIS_Y];
